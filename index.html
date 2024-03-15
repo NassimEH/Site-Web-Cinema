@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Cinema : Liste de films et séries </title>
+    <link href="style.css" rel="stylesheet">
+    <script src="movie.js" type="riot"></script>
+    <script src="./node_modules/riot/riot.min.js"></script>
+    <script src="./node_modules/riot/riot+compiler.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <aside class="sidebar">
+                <h2> Rechercher </h2>
+                <input type = "text" placeholder="Recherchez...">
+                <h2> Genres </h2>
+                <ul class="genres">
+                    <li> Action </li>
+                    <li> Horreur </li>
+                    <li> Drame </li>
+                    <li> Épiques </li>
+                    <li> Comédie </li>
+                    <li> Science-fiction </li>
+                    <li> Aventure </li>
+                </ul>
+                <h2> Studios </h2>
+                <ul class="studios">
+                    <li> Walt Disney Pictures </li>
+                    <li> Universal Pictures </li>
+                    <li> Paramount Pictures </li>
+                    <li> 20th Century Fox </li>
+                    <li> Warner Bros </li>
+                </ul>
+            </aside>
+            <div class="main-content">
+                <h2> Vos films et séries à la une : </h2>
+                <div class="grid">
+
+                    <movie></movie>
+
+                <script>
+                    riot.compile().then(()=> {
+                        riot.mount('movie');
+                    })
+                </script>
+                </div>
+            </div>
+        </div>
+    </header>
+</body>
+</html>
