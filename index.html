@@ -3,63 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Cinema : Liste de films et séries </title>
-    <link href="style.css" rel="stylesheet">
-    <script src="app.riot" type="riot"></script>
-    <script src="movie.riot" type="riot"></script>
-    <script src="filtre.riot" type="riot"></script>
-    <script src="./node_modules/riot/riot.min.js"></script>
-    <script src="./node_modules/riot/riot+compiler.min.js"></script>
-    <header>
-        <div class="container">
-            <aside class="sidebar">
-                <h2> Rechercher </h2>
-                <input type = "text" placeholder="Recherchez...">
-                <h2> Genres </h2>
-                <ul class="genres">
-                    <li> Action </li>
-                    <li> Horreur </li>
-                    <li> Drame </li>
-                    <li> Épiques </li>
-                    <li> Comédie </li>
-                    <li> Science-fiction </li>
-                    <li> Aventure </li>
-                </ul>
-                <h2> Studios </h2>
-                <ul class="studios">
-                    <li> Walt Disney Pictures </li>
-                    <li> Universal Pictures </li>
-                    <li> Paramount Pictures </li>
-                    <li> 20th Century Fox </li>
-                    <li> Warner Bros </li>
-                </ul>
-            </aside>
-            <div class="main-content">
-                <h2> Vos films et séries à la une : </h2>
-                <div class="grid">
+    <title>Cinema : Liste de films et séries</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
 
-                    <movie></movie>
+        .hero.is-dark {
+            background: linear-gradient(to right, #000000, #434343);
+        }
 
-                <script>
-                    (async () => {
-                        await riot.compile()
-                        movieUtils = getMovieUtils()
+        .footer {
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
 
-                        riot.install(function(component){
-                            component.movieUtils = movieUtils
-                        })
-                    })
-                    riot.compile().then(()=> {
-                        riot.mount('app');
-                    })
-                </script>
-                </head>
-                <body>
-                    <app> </app>
-                </body>
+        .menu-sticky {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #fff;
+            padding: 10px 20px;
+            margin-left: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+
+        .card {
+            transition: transform 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .menu-list a:hover {
+            background-color: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header class="hero is-dark is-bold">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title is-1">Bienvenue !</h1>
+                <h2 class="subtitle">Explorez un univers de films et séries</h2>
+                <div class="field has-addons">
+                    <div class="control is-expanded">
+                        <input class="input is-medium" type="text" placeholder="Recherchez...">
+                    </div>
+                    <div class="control">
+                        <a class="button is-info is-medium">
+                            <span class="icon">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <span>Recherche</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
+
+    <div class="columns" style="margin-top: 20px;">
+        <aside class="column is-2">
+            <aside class="menu menu-sticky">
+                <p class="menu-label">Genres</p>
+                <ul class="menu-list">
+                    <li><a>Action</a></li>
+                    <li><a>Horreur</a></li>
+                    <li><a>Comédie</a></li>
+                    <!-- Plus de genres -->
+                </ul>
+                <p class="menu-label">Studios de Cinéma</p>
+                <ul class="menu-list">
+                    <li><a>Universal Pictures</a></li>
+                    <li><a>Warner Bros.</a></li>
+                    <li><a>Paramount Pictures</a></li>
+                    <!-- Plus de studios -->
+                </ul>
+            </aside>
+        </aside>
+        <main class="column">
+            <div class="container">
+                <div id="movies" class="columns is-multiline">
+                    <!-- Les films seront chargés ici -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong class="has-text-white">Fait</strong> par <a href="https://github.com" class="has-text-light">Nassim El Haddad</a>. <br>
+                <strong class="has-text-white">Fait</strong> par <a href="https://github.com" class="has-text-light">Marjorie Daveluy</a>.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        const apiKey = '34c6494d54853100f99d5fdf6bde3dd7';
+        const apiUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=fr-FR`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const moviesContainer = document.getElementById('movies');
+                data.results.forEach(movie => {
+                    const movieEl = document.createElement('div');
+                    movieEl.classList.add('column', 'is-3');
+                    movieEl.innerHTML = `
+                        <div class="card">
+                            <div class="card-image">
+                                <figure class="image is-4by3">
+                                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                                </figure>
+                            </div>
+                            <div class="card-content">
+                                <p class="title is-4">${movie.title}</p>
+                                <p class="subtitle is-6">${movie.release_date}</p>
+                            </div>
+                        </div>
+                    `;
+                    moviesContainer.appendChild(movieEl);
+                });
+            })
+            .catch(error => console.error('Erreur lors de la récupération des films:', error));
+    </script>
 </body>
 </html>

@@ -1,3 +1,5 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+
 /* Styles généraux */
 body, html {
     margin: 0;
@@ -73,6 +75,59 @@ body, html {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-header {
+    width: 100%;
+    background-color: black;
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+
+.search-header input[type="text"] {
+    width: 90%;
+    max-width: 600px;
+    padding: 10px;
+    margin: 0 auto;
+    display: block;
+    border: none;
+    border-radius: 5px;
+}
+
+.sidebar {
+    background-color: #f4f4f4;
+    padding: 20px;
+    float: left;
+    width: 200px;
+    box-sizing: border-box;
+    height: 100vh;
+}
+
+.main-content {
+    margin-left: 220px;
+    padding: 20px;
+}
+
+.genres, .studios {
+    list-style-type: none;
+    padding: 0;
+}
+
+.genres li, .studios li {
+    padding: 5px 0;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+movie {
+    flex: 1 1 200px; /* Adjust the flex-basis value as needed */
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 /* Responsive adjustments */
