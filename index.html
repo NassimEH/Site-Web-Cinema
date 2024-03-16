@@ -41,8 +41,16 @@
                     <movie></movie>
 
                 <script>
+                    (async () => {
+                        await riot.compile()
+                        movieUtils = getMovieUtils()
+
+                        riot.install(function(component){
+                            component.movieUtils = movieUtils
+                        })
+                    })
                     riot.compile().then(()=> {
-                        riot.mount('movie');
+                        riot.mount('app');
                     })
                 </script>
                 </div>
