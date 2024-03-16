@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Cinema : Liste de films et séries </title>
     <link href="style.css" rel="stylesheet">
-    <script src="movie.js" type="riot"></script>
+    <script src="app.riot" type="riot"></script>
+    <script src="movie.riot" type="riot"></script>
+    <script src="filtre.riot" type="riot"></script>
     <script src="./node_modules/riot/riot.min.js"></script>
     <script src="./node_modules/riot/riot+compiler.min.js"></script>
-</head>
-<body>
     <header>
         <div class="container">
             <aside class="sidebar">
@@ -53,6 +53,10 @@
                         riot.mount('app');
                     })
                 </script>
+                </head>
+                <body>
+                    <app> </app>
+                </body>
                 </div>
             </div>
         </div>

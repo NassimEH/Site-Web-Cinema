@@ -1,43 +1,58 @@
-const options = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNGM2NDk0ZDU0ODUzMTAwZjk5ZDVmZGY2YmRlM2RkNyIsInN1YiI6IjY1ZjM2MGE2MzU4MThmMDE4OGQxZjA5NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vO19QYj8mCzVS2LX5XY8RIxGfWtiTYnQolsjsJXT6Oc'
-  }
-};
+function getMovieUtils() {
+    let currentMovieList;
+    let currentFilter = 1337;
+    let url = "https://api.themoviedb.org/3/";
+    let api_key = "34c6494d54853100f99d5fdf6bde3dd7";
 
-fetch('https://api.themoviedb.org/3/trending/all/day?language=en-US', options)
-  .then(response => response.json())
-  .then(response => console.log(response))
-  .catch(err => console.error(err));
+    let utils = {
+        getTopRatedMovies,
+        getPopularMovies,
+        getComingSoonMovies,
+        getNewMovies,
+        getCurrentFilter,
+        getGenres,
+        getMovieById
+    };
 
-// const options = {
-//   method: 'GET',
-//   headers: {
-//     accept: 'application/json',
-//     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNGM2NDk0ZDU0ODUzMTAwZjk5ZDVmZGY2YmRlM2RkNyIsInN1YiI6IjY1ZjM2MGE2MzU4MThmMDE4OGQxZjA5NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.vO19QYj8mCzVS2LX5XY8RIxGfWtiTYnQolsjsJXT6Oc'
-//   }
-// };
+    function getTopRatedMovies(page_index) {
+        return fetch(url + "movie/top_rated?api_key=" + api_key + "&page=" + page_index + "&language=fr")
+        .then(response => response.json())
+        .then(data => data);
+    }
 
-// function movie(){
-//   const [movieList,setMovieList] = useState([])
+    function getPopularMovies(page_index) {
+        return fetch(url + "movie/popular?api_key=" + api_key + "&page=" + page_index + "&language=fr")
+        .then(response => response.json())
+        .then(data => data);
+    }
 
-//   const getMovie = ()=>{
-//   fetch('https://api.themoviedb.org/3/trending/all/day?language=en-US?api_key=34c6494d54853100f99d5fdf6bde3dd7')
-//   .then(response => response.json())
-//   .then(response => console.log(response))
-//   .catch(err => console.error(err));
-//   }
+    function getComingSoonMovies(page_index) {
+        return fetch(url + "movie/upcoming?api_key=" + api_key + "&page=" + page_index + "&language=fr")
+        .then(response => response.json())
+        .then(data => data);
+    }
 
-//   useEffect(()=>{
-//     getMovie()
-//   },[])
+    function getNewMovies(page_index) {
+        return fetch(url + "movie/now_playing?api_key=" + api_key + "&page=" + page_index + "&language=fr")
+        .then(response => response.json())
+        .then(data => data);
+    }
 
-//   return(
-//     <div>
-//     {movieList.map(()=> (
-//       <img src={'https://image.tmdb.org/t/p/w500${movie.poster_path}'}/>
-//     ))}
-//     </div>
-//   )
-// }
+    function getCurrentFilter() {
+        return localStorage.getItem("currfilter");
+    }
+
+    function getGenres() {
+		return fetch(url + "genre/movie/list?api_key=" + api_key + "&language=fr")
+		.then(response => response.json())
+		.then(data => data)
+	}
+
+    function getMovieById(id) {
+		return fetch(url + "movie/" + id + "?api_key=" + api_key + "&language=fr")
+		.then(response => response.json())
+		.then(data=>data)
+	}
+
+    return utils;
+}

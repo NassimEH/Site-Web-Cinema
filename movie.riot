@@ -1,0 +1,42 @@
+<movie>
+    <a href="./movie-page.html?id={props.movie.id}">{props.movie.title}</a>
+    <img src='https://image.tmdb.org/t/p/w300{props.movie.poster_path}'></img>
+    <label>{props.movie.vote_average}/10</label>
+    <label>{props.movie.vote_count} votes</label>
+    <ul class="genres">
+        <li class="genre" each={ genre in state.movie_genres }>{genre}</li>
+    </ul>
+
+    <script>
+
+    export default {
+        onBeforeMount(props, state) {
+            this.state = {
+                movie_genres: this.getGenresFromIds(),
+            }
+        },
+
+        getGenresFromIds() {
+            let ret = []
+            let genres = []
+            genres = JSON.parse(localStorage.getItem("genres")).genres;
+            this.props.movie.genre_ids.length
+			for(let i = 0; i<genres.length; i++)
+            {
+				for(let j = 0; j< this.props.movie.genre_ids.length; j++) {
+					if(genres[i].id == this.props.movie.genre_ids[j]) {
+						ret.push(genres[i].name)
+                    }
+                }
+            }
+
+			//console.log(ret)	
+			return ret	
+        },
+
+        onBeforeUpdate(props, state) {
+            this.state.movie_genres = this.getGenresFromIds();
+        },
+    }
+</script>
+</movie>
