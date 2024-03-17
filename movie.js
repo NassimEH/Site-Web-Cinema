@@ -1,7 +1,7 @@
 function getMovieUtils() {
     let currentMovieList;
     let currentFilter = 1337;
-    let url = "https://api.themoviedb.org/3/";
+    let url = "https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=fr-FR";
     let api_key = "34c6494d54853100f99d5fdf6bde3dd7";
 
     let utils = {

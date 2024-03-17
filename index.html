@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="movie.js"></script>
+
     <style>
         body, html {
             margin: 0;
@@ -15,7 +17,7 @@
         }
 
         .hero.is-dark {
-            background: linear-gradient(to right, #000000, #434343);
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         .footer {
@@ -52,30 +54,70 @@
             background-color: #667eea;
             color: white;
         }
+
+        .stars {
+            color: gold;
+        }
+
+        .tags {
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 <body>
-    <header class="hero is-dark is-bold">
-        <div class="hero-body">
-            <div class="container">
-                <h1 class="title is-1">Bienvenue !</h1>
-                <h2 class="subtitle">Explorez un univers de films et séries</h2>
-                <div class="field has-addons">
-                    <div class="control is-expanded">
-                        <input class="input is-medium" type="text" placeholder="Recherchez...">
-                    </div>
-                    <div class="control">
-                        <a class="button is-info is-medium">
-                            <span class="icon">
-                                <i class="fas fa-search"></i>
-                            </span>
-                            <span>Recherche</span>
-                        </a>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <i class="fas fa-home"></i>&nbsp;Home
+            </a>
+    
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="#">Films</a>
+                <a class="navbar-item" href="#">Séries</a>
+    
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">Plus</a>
+    
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item" href="#">À propos</a>
+                        <a class="navbar-item" href="#">Contact</a>
+                        <hr class="navbar-divider">
+                        <a class="navbar-item" href="#">Report an issue</a>
                     </div>
                 </div>
             </div>
         </div>
-    </header>
+    </nav>
+    
+    <header class="hero is-dark is-bold is-fullheight-with-navbar">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <h1 class="title is-1">Bienvenue !</h1>
+            <h2 class="subtitle">Explorez un univers de films et séries</h2>
+            <div class="field has-addons has-addons-centered">
+                <div class="control is-expanded">
+                    <input class="input is-medium" type="text" placeholder="Recherchez...">
+                </div>
+                <div class="control">
+                    <a class="button is-info is-medium">
+                        <span class="icon">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <span>Recherche</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
 
     <div class="columns" style="margin-top: 20px;">
         <aside class="column is-2">
@@ -85,14 +127,12 @@
                     <li><a>Action</a></li>
                     <li><a>Horreur</a></li>
                     <li><a>Comédie</a></li>
-                    <!-- Plus de genres -->
                 </ul>
                 <p class="menu-label">Studios de Cinéma</p>
                 <ul class="menu-list">
                     <li><a>Universal Pictures</a></li>
                     <li><a>Warner Bros.</a></li>
                     <li><a>Paramount Pictures</a></li>
-                    <!-- Plus de studios -->
                 </ul>
             </aside>
         </aside>
@@ -104,6 +144,23 @@
             </div>
         </main>
     </div>
+
+    <div class="section">
+        <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+            <a class="pagination-previous" disabled>Précédent</a>
+            <a class="pagination-next">Suivant</a>
+            <ul class="pagination-list">
+                <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
+                <li><span class="pagination-ellipsis">&hellip;</span></li>
+                <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
+                <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
+                <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
+                <li><span class="pagination-ellipsis">&hellip;</span></li>
+                <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
+            </ul>
+        </nav>
+    </div>
+    
 
     <footer class="footer">
         <div class="content has-text-centered">
@@ -118,30 +175,64 @@
         const apiKey = '34c6494d54853100f99d5fdf6bde3dd7';
         const apiUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=fr-FR`;
 
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                const moviesContainer = document.getElementById('movies');
-                data.results.forEach(movie => {
-                    const movieEl = document.createElement('div');
-                    movieEl.classList.add('column', 'is-3');
-                    movieEl.innerHTML = `
-                        <div class="card">
-                            <div class="card-image">
-                                <figure class="image is-4by3">
-                                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                                </figure>
-                            </div>
-                            <div class="card-content">
-                                <p class="title is-4">${movie.title}</p>
-                                <p class="subtitle is-6">${movie.release_date}</p>
-                            </div>
-                        </div>
-                    `;
-                    moviesContainer.appendChild(movieEl);
-                });
-            })
-            .catch(error => console.error('Erreur lors de la récupération des films:', error));
+        // Exemple de fonction pour convertir un score en étoiles (à implémenter selon vos besoins)
+function convertScoreToStars(score) {
+    const fullStar = `<i class="fas fa-star"></i>`;
+    const halfStar = `<i class="fas fa-star-half-alt"></i>`;
+    const emptyStar = `<i class="far fa-star"></i>`;
+    let stars = "";
+    for (let i = 0; i < 5; i++) {
+        if (score >= 2) {
+            stars += fullStar;
+        } else if (score >= 1) {
+            stars += halfStar;
+        } else {
+            stars += emptyStar;
+        }
+        score -= 2;
+    }
+    return stars;
+}
+
+// Supposons que vous avez un objet qui associe les IDs de genre à leurs noms
+const genreLookup = {
+    28: "Action",
+    35: "Comedy",
+    // Ajoutez d'autres genres selon vos données
+};
+
+fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+        const moviesContainer = document.getElementById('movies');
+        data.results.forEach(movie => {
+            const genres = movie.genre_ids.map(id => genreLookup[id] || "Genre inconnu").join(", ");
+            const stars = convertScoreToStars(movie.vote_average / 2); // Supposons que vote_average est sur 10
+
+            const movieEl = document.createElement('div');
+            movieEl.classList.add('column', 'is-3');
+            movieEl.innerHTML = `
+                <div class="card">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <p class="title is-4">${movie.title}</p>
+                        <p class="subtitle is-6">${movie.release_date}</p>
+                        <div class="stars">${stars}</div>
+                        <div class="tags">${genres}</div>
+                    </div>
+                </div>
+            `;
+            moviesContainer.appendChild(movieEl);
+        });
+    })
+    .catch(error => console.error('Erreur lors de la récupération des films:', error));
+
+
+            
     </script>
 </body>
 </html>
