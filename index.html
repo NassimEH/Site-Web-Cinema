@@ -62,9 +62,46 @@
         .tags {
             margin-top: 0.5rem;
         }
+
+        .menu-sticky {
+    position: -webkit-sticky; 
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #fff;
+    padding: 10px 20px;
+    margin-left: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
     </style>
 </head>
 <body>
+
+    <div id="movieModal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title" id="modalMovieTitle">Titre du film</p>
+            <button class="delete" aria-label="close" onclick="closeModal()"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="content">
+              <figure class="image is-4by3">
+                <img id="modalMoviePoster" src="" alt="Poster du film">
+              </figure>
+              <p id="modalMovieDescription"></p>
+            </div>
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-success" onclick="closeModal()">Fermer</button>
+          </footer>
+        </div>
+      </div>
+      
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="#">
@@ -122,22 +159,38 @@
     <div class="columns" style="margin-top: 20px;">
         <aside class="column is-2">
             <aside class="menu menu-sticky">
-                <p class="menu-label">Genres</p>
-                <ul class="menu-list">
-                    <li><a>Action</a></li>
-                    <li><a>Horreur</a></li>
-                    <li><a>Comédie</a></li>
-                </ul>
-                <p class="menu-label">Studios de Cinéma</p>
-                <ul class="menu-list">
-                    <li><a>Universal Pictures</a></li>
-                    <li><a>Warner Bros.</a></li>
-                    <li><a>Paramount Pictures</a></li>
-                </ul>
             </aside>
+            <aside class="menu menu-sticky">
+                <p class="menu-label">Filtre</p>
+                <div class="select is-rounded">
+                    <select id="filterSelect">
+                        <option value="trending">Tendance</option>
+                        <option value="top_rated">Mieux notés</option>
+                    </select>
+                </div>
+            
+                <p class="menu-label" style="margin-top: 20px;">Genres</p>
+                <div class="buttons" id="genreButtons">
+                    <div class="buttons" id="genreButtons">
+    <button class="button is-small is-info is-light" onclick="filterGenre('action')">Action</button>
+    <button class="button is-small is-info is-light" onclick="filterGenre('comedy')">Comédie</button>
+    <button class="button is-small is-info is-light" onclick="filterGenre('horror')">Horreur</button>
+    <!-- Ajoutez plus de boutons selon les genres que vous souhaitez -->
+</div>
+
+                </div>
+            </aside>
+            
         </aside>
+        
         <main class="column">
             <div class="container">
+                <section class="section">
+                    <div class="container has-text-centered">
+                        <h2 class="title is-3" style="font-weight: bold; font-family: 'Poppins', sans-serif; margin-bottom: 2rem;">Les films en tendance !</h2>
+                    </div>
+                </section>
+                
                 <div id="movies" class="columns is-multiline">
                     <!-- Les films seront chargés ici -->
                 </div>
@@ -173,66 +226,133 @@
 
     <script>
         const apiKey = '34c6494d54853100f99d5fdf6bde3dd7';
-        const apiUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=fr-FR`;
-
-        // Exemple de fonction pour convertir un score en étoiles (à implémenter selon vos besoins)
-function convertScoreToStars(score) {
-    const fullStar = `<i class="fas fa-star"></i>`;
-    const halfStar = `<i class="fas fa-star-half-alt"></i>`;
-    const emptyStar = `<i class="far fa-star"></i>`;
-    let stars = "";
-    for (let i = 0; i < 5; i++) {
-        if (score >= 2) {
-            stars += fullStar;
-        } else if (score >= 1) {
-            stars += halfStar;
-        } else {
-            stars += emptyStar;
+        const apiUrlTrending = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=fr-FR`;
+        const apiUrlGenres = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=fr-FR`;
+        
+        let genres = {};
+        
+        // Charger les genres
+        fetch(apiUrlGenres)
+            .then(response => response.json())
+            .then(data => {
+                data.genres.forEach(genre => {
+                    genres[genre.id] = genre.name;
+                });
+                loadMovies();
+            })
+            .catch(error => console.error('Erreur lors de la récupération des genres:', error));
+        
+        function loadMovies() {
+            fetch(apiUrlTrending)
+                .then(response => response.json())
+                .then(data => {
+                    const moviesContainer = document.getElementById('movies');
+                    moviesContainer.innerHTML = ''; // Vide le conteneur si nécessaire
+                    data.results.forEach(movie => {
+                        const movieEl = document.createElement('div');
+                        movieEl.classList.add('column', 'is-3');
+                        const movieGenres = movie.genre_ids.map(id => genres[id]).join(', ');
+                        const stars = convertScoreToStars(movie.vote_average);
+                        movieEl.innerHTML = `
+                            <div class="card" style="cursor: pointer;">
+                                <div class="card-image">
+                                    <figure class="image is-4by3">
+                                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" title="${movie.title}">
+                                    </figure>
+                                </div>
+                                <div class="card-content">
+                                    <p class="title is-4">${movie.title}</p>
+                                    <p class="subtitle is-6">${movie.release_date}</p>
+                                    <div class="stars">${stars}</div>
+                                    <div class="tags">${movieGenres}</div>
+                                </div>
+                            </div>
+                        `;
+                        movieEl.addEventListener('click', () => {
+                            openModal(movie);
+                        });
+                        moviesContainer.appendChild(movieEl);
+                    });
+                })
+                .catch(error => console.error('Erreur lors de la récupération des films:', error));
         }
-        score -= 2;
+        
+        function openModal(movie) {
+            document.getElementById('modalMovieTitle').textContent = movie.title;
+            document.getElementById('modalMoviePoster').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+            document.getElementById('modalMovieDescription').textContent = movie.overview; // Assurez-vous que 'overview' contient la description du film
+            document.getElementById('movieModal').classList.add('is-active');
+        }
+        
+        function closeModal() {
+            document.getElementById('movieModal').classList.remove('is-active');
+        }
+        
+        function convertScoreToStars(score) {
+            const roundedScore = Math.round(score / 2);
+            let stars = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < roundedScore) {
+                    stars += `<i class="fas fa-star"></i>`;
+                } else {
+                    stars += `<i class="far fa-star"></i>`;
+                }
+            }
+            return stars;
+        }
+
+
+function searchMovies() {
+    const searchQuery = document.getElementById('searchInput').value;
+    if (!searchQuery) {
+        loadMovies(); // Charge les films en tendance si la recherche est vide
+        return;
     }
-    return stars;
+    const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(searchQuery)}&language=fr-FR`;
+
+    fetch(searchUrl)
+        .then(response => response.json())
+        .then(data => {
+            const moviesContainer = document.getElementById('movies');
+            moviesContainer.innerHTML = ''; // Vide le conteneur pour les nouveaux résultats
+            if (data.results.length === 0) {
+                moviesContainer.innerHTML = '<p class="has-text-centered">Aucun film trouvé.</p>';
+                return;
+            }
+            displayMovies(data.results); // Utilisez la fonction displayMovies pour afficher les films
+        })
+        .catch(error => console.error('Erreur lors de la recherche:', error));
 }
 
-// Supposons que vous avez un objet qui associe les IDs de genre à leurs noms
-const genreLookup = {
-    28: "Action",
-    35: "Comedy",
-    // Ajoutez d'autres genres selon vos données
-};
+// Refactorez l'affichage des films dans une fonction pour éviter la répétition du code
+function displayMovies(movies) {
+    const moviesContainer = document.getElementById('movies');
+    movies.forEach(movie => {
+        // Logique d'affichage des films, identique à celle dans loadMovies
+    });
+}
 
-fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-        const moviesContainer = document.getElementById('movies');
-        data.results.forEach(movie => {
-            const genres = movie.genre_ids.map(id => genreLookup[id] || "Genre inconnu").join(", ");
-            const stars = convertScoreToStars(movie.vote_average / 2); // Supposons que vote_average est sur 10
-
-            const movieEl = document.createElement('div');
-            movieEl.classList.add('column', 'is-3');
-            movieEl.innerHTML = `
-                <div class="card">
-                    <div class="card-image">
-                        <figure class="image is-4by3">
-                            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                        </figure>
-                    </div>
-                    <div class="card-content">
-                        <p class="title is-4">${movie.title}</p>
-                        <p class="subtitle is-6">${movie.release_date}</p>
-                        <div class="stars">${stars}</div>
-                        <div class="tags">${genres}</div>
-                    </div>
-                </div>
-            `;
-            moviesContainer.appendChild(movieEl);
-        });
-    })
-    .catch(error => console.error('Erreur lors de la récupération des films:', error));
+// Supposons que vous ayez déjà récupéré les genres dans un objet `genres`
+function setupGenreButtons() {
+    const container = document.getElementById('genreButtons');
+    Object.keys(genres).forEach(genreId => {
+        const button = document.createElement('button');
+        button.classList.add('button', 'is-small', 'is-info', 'is-light');
+        button.innerText = genres[genreId];
+        button.onclick = () => { 
+            // Logique pour filtrer les films par ce genre
+            // Peut-être marquer le bouton comme sélectionné ici
+        };
+        container.appendChild(button);
+    });
+}
 
 
-            
-    </script>
+</script>
+
+
+        
+        </script>
+        
 </body>
 </html>
