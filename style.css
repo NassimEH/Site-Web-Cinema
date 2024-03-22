@@ -1,147 +1,100 @@
-@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 
-/* Styles généraux */
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f0f0;
+    font-family: 'Poppins', sans-serif;
 }
 
-.container {
-    display: flex;
-    flex-wrap: wrap;
+.hero.is-dark {
+    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.header {
-    background-image: linear-gradient(to right, #007bff, #6610f2);
-    color: #fff;
-    padding: 20px;
-    text-align: center;
+.footer {
+    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
 }
 
-/* Sidebar styles */
-.sidebar {
-    background-color: #343a40;
-    color: #fff;
-    padding: 20px;
-    width: 250px;
-}
-
-.sidebar h2 {
-    margin-top: 0;
-    color: #ffc107; /* Jaune doré pour les titres */
-}
-
-.sidebar input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #007bff; /* Bordure bleue */
-    border-radius: 5px;
-    color: #333;
-}
-
-.genres li, .studios li {
-    list-style: none;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.genres li:hover, .studios li:hover {
-    color: #007bff; /* Bleu au survol */
-}
-
-/* Main content styles */
-.main-content {
-    flex: 1;
-    padding: 20px;
-}
-
-.main-content h2 {
-    margin-top: 0;
-    color: #28a745; /* Vert */
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-}
-
-.grid movie {
+.menu-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 10px 20px;
+    margin-left: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
 }
 
-.search-header {
-    width: 100%;
-    background-color: black;
-    padding: 10px 0;
-    box-sizing: border-box;
+.card {
+    transition: transform 0.3s ease;
+    border-radius: 10px;
 }
 
-.search-header input[type="text"] {
-    width: 90%;
-    max-width: 600px;
-    padding: 10px;
-    margin: 0 auto;
-    display: block;
-    border: none;
-    border-radius: 5px;
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-.sidebar {
-    background-color: #f4f4f4;
-    padding: 20px;
-    float: left;
-    width: 200px;
-    box-sizing: border-box;
-    height: 100vh;
-}
-
-.main-content {
-    margin-left: 220px;
+.card-content {
     padding: 20px;
 }
 
-.genres, .studios {
-    list-style-type: none;
-    padding: 0;
+.menu-list a:hover {
+    background-color: #667eea;
+    color: white;
 }
 
-.genres li, .studios li {
-    padding: 5px 0;
+.stars {
+    color: gold;
 }
 
-.grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+.tags {
+    margin-top: 0.5rem;
 }
 
-movie {
-    flex: 1 1 200px; /* Adjust the flex-basis value as needed */
-    border: 1px solid #ccc;
-    padding: 10px;
-    box-sizing: border-box;
+.menu-sticky {
+position: -webkit-sticky; 
+position: sticky;
+top: 0;
+z-index: 10;
+background-color: #fff;
+padding: 10px 20px;
+margin-left: 20px;
+border-radius: 8px;
+box-shadow: 0 2px 4px rgba(0,0,0,.1);
+max-height: 100vh;
+overflow-y: auto;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-    }
+.marquee {
+overflow: hidden;
+position: relative;
+background-color: #333; /* Arrière-plan sombre */
+color: #fff; /* Texte blanc */
+display: flex;
+align-items: center; /* Centre verticalement le texte */
+padding: 20px 0; /* Augmente le padding pour plus d'espace vertical */
+box-shadow: 0px 2px 5px rgba(0,0,0,0.5);
+}
 
-    .sidebar {
-        width: 100%;
-        margin-bottom: 20px;
-    }
+.marquee-content {
+position: absolute;
+white-space: nowrap; /* Garde le texte sur une seule ligne */
+/* Pas besoin de définir une position de départ en CSS */
+}
 
-    .main-content {
-        flex: 1;
-    }
+
+.hero {
+padding-bottom: 20px; /* Ajuste cette valeur selon les besoins */
+/* Autres styles du hero */
+}
+
+
+@keyframes marquee-animation {
+from {
+transform: translateX(100%);
+}
+to {
+transform: translateX(-100%); /* Fait défiler le texte jusqu'à ce qu'il soit entièrement hors de vue à gauche */
+}
 }

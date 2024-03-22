@@ -7,77 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <script src="movie.js"></script>
-
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .hero.is-dark {
-            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .footer {
-            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .menu-sticky {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background-color: #fff;
-            padding: 10px 20px;
-            margin-left: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,.1);
-        }
-
-        .card {
-            transition: transform 0.3s ease;
-            border-radius: 10px;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .card-content {
-            padding: 20px;
-        }
-
-        .menu-list a:hover {
-            background-color: #667eea;
-            color: white;
-        }
-
-        .stars {
-            color: gold;
-        }
-
-        .tags {
-            margin-top: 0.5rem;
-        }
-
-        .menu-sticky {
-    position: -webkit-sticky; 
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background-color: #fff;
-    padding: 10px 20px;
-    margin-left: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,.1);
-    max-height: 100vh;
-    overflow-y: auto;
-}
-
-    </style>
+    
 </head>
 <body>
 
@@ -133,29 +65,33 @@
         </div>
     </nav>
     
-    <header class="hero is-dark is-bold is-fullheight-with-navbar">
-    <div class="hero-body">
-        <div class="container has-text-centered">
-            <h1 class="title is-1">Bienvenue !</h1>
-            <h2 class="subtitle">Explorez un univers de films et séries</h2>
-            <div class="field has-addons has-addons-centered">
-                <div class="control is-expanded">
-                    <input class="input is-medium" type="text" placeholder="Recherchez...">
-                </div>
-                <div class="control">
-                    <a class="button is-info is-medium">
-                        <span class="icon">
-                            <i class="fas fa-search"></i>
-                        </span>
-                        <span>Recherche</span>
-                    </a>
+    <header class="hero is-dark is-bold" style="padding: 3rem 0;">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title is-1">Bienvenue !</h1>
+                <h2 class="subtitle">Explorez un univers de films et séries</h2>
+                <div class="field has-addons has-addons-centered">
+                    <div class="control is-expanded">
+                        <input class="input is-medium" type="text" placeholder="Recherchez..." id="searchInput">
+
+                    </div>
+                    <div class="control">
+                        <a class="button is-info is-medium" onclick="searchMovies()">
+                            <span class="icon">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <span>Recherche</span>
+                        </a>
+                        
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</header>
-
-
+        <div class="container">
+        </div>
+    </header>
+    
+    
     <div class="columns" style="margin-top: 20px;">
         <aside class="column is-2">
             <aside class="menu menu-sticky">
@@ -181,7 +117,7 @@
                 </div>
             </aside>
             
-        </aside>
+        </aside>     
         
         <main class="column">
             <div class="container">
@@ -223,7 +159,11 @@
             </p>
         </div>
     </footer>
-
+    <div class="marquee">
+        <div class="marquee-content">
+            
+        </div>
+    </div>
     <script>
         const apiKey = '34c6494d54853100f99d5fdf6bde3dd7';
         const apiUrlTrending = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=fr-FR`;
@@ -302,10 +242,10 @@
         }
 
 
-function searchMovies() {
-    const searchQuery = document.getElementById('searchInput').value;
+        function searchMovies() {
+    const searchQuery = document.getElementById('searchInput').value.trim();
     if (!searchQuery) {
-        loadMovies(); // Charge les films en tendance si la recherche est vide
+        loadMovies(); // Recharge les films en tendance si la barre de recherche est vide
         return;
     }
     const searchUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(searchQuery)}&language=fr-FR`;
@@ -319,18 +259,63 @@ function searchMovies() {
                 moviesContainer.innerHTML = '<p class="has-text-centered">Aucun film trouvé.</p>';
                 return;
             }
-            displayMovies(data.results); // Utilisez la fonction displayMovies pour afficher les films
+            displayMovies(data.results); // Affiche les résultats de la recherche
         })
-        .catch(error => console.error('Erreur lors de la recherche:', error));
+        .catch(error => {
+            console.error('Erreur lors de la recherche:', error);
+            const moviesContainer = document.getElementById('movies');
+            moviesContainer.innerHTML = '<p class="has-text-centered">Erreur lors de la recherche des films.</p>';
+        });
 }
 
-// Refactorez l'affichage des films dans une fonction pour éviter la répétition du code
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Assurez-vous que le DOM est complètement chargé
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        // Vérifie si la touche pressée est 'Entrée'
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Empêche l'action par défaut
+            searchMovies(); // Appelle la fonction de recherche
+        }
+    });
+});
+
+
+// Exemple de la fonction displayMovies
 function displayMovies(movies) {
     const moviesContainer = document.getElementById('movies');
     movies.forEach(movie => {
-        // Logique d'affichage des films, identique à celle dans loadMovies
+        const movieEl = document.createElement('div');
+        movieEl.classList.add('column', 'is-3');
+        const movieGenres = movie.genre_ids.map(id => genres[id] ? genres[id] : 'Genre inconnu').join(', ');
+        const stars = convertScoreToStars(movie.vote_average);
+        movieEl.innerHTML = `
+            <div class="card" onclick="openModal(${JSON.stringify(movie).split('"').join("&quot;")})" style="cursor: pointer;">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" title="${movie.title}">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <p class="title is-4">${movie.title}</p>
+                    <p class="subtitle is-6">${movie.release_date}</p>
+                    <div class="stars">${stars}</div>
+                    <div class="tags">${movieGenres}</div>
+                </div>
+            </div>
+        `;
+        moviesContainer.appendChild(movieEl);
     });
 }
+
+function convertScoreToStars(score) {
+    const roundedScore = Math.round(score / 2);
+    let stars = '';
+    for (let i = 0; i < 5; i++) {
+        stars += i < roundedScore ? `<i class="fas fa-star"></i>` : `<i class="far fa-star"></i>`;
+    }
+    return stars;
+}
+
 
 // Supposons que vous ayez déjà récupéré les genres dans un objet `genres`
 function setupGenreButtons() {
@@ -348,11 +333,64 @@ function setupGenreButtons() {
 }
 
 
-</script>
+    // JavaScript pour gérer le marquee
+    const marqueeText = "Le meilleur site pour les cinéphiles, constamment mis à jour rien que pour vous.";
+    const marqueeContainer = document.querySelector('.marquee');
+    const marqueeContent = document.createElement('div');
+    marqueeContent.classList.add('marquee-content');
+    marqueeContent.textContent = marqueeText; // Initialiser le texte du marquee
+    marqueeContainer.appendChild(marqueeContent);
 
+    let marqueeSpeed = 2; // Vitesse du défilement, ajustez selon besoin
+    let marqueePosition = marqueeContainer.offsetWidth; // Départ du côté droit
 
+    function updateMarquee() {
+        marqueePosition -= marqueeSpeed; // Déplace le marquee vers la gauche
+        if (marqueePosition < -marqueeContent.offsetWidth) {
+            marqueePosition = marqueeContainer.offsetWidth; // Reprend au bord droit après avoir atteint le bord gauche
+        }
+        marqueeContent.style.transform = `translateX(${marqueePosition}px)`;
+        requestAnimationFrame(updateMarquee); // Animation continue
+    }
+
+    updateMarquee(); // Lance l'animation du marquee
+
+    fetch(apiUrlGenres)
+    .then(response => response.json())
+    .then(data => {
+        genres = data.genres.reduce((acc, genre) => {
+            acc[genre.id] = genre.name;
+            return acc;
+        }, {});
         
-        </script>
+        // Met à jour l'UI avec les genres disponibles après le fetching
+        setupGenreButtons(genres);
+    })
+    .catch(error => console.error('Erreur lors de la récupération des genres:', error));
+
+// Fonction pour générer dynamiquement les boutons des genres
+function setupGenreButtons(genres) {
+    const container = document.getElementById('genreButtons');
+    container.innerHTML = ''; // Nettoie les boutons précédents
+
+    // Crée un bouton pour chaque genre
+    Object.entries(genres).forEach(([genreId, genreName]) => {
+        const button = document.createElement('button');
+        button.classList.add('button', 'is-small', 'is-info', 'is-light');
+        button.innerText = genreName;
+        button.onclick = () => filterGenre(genreId); // Assigne une fonction de filtrage basée sur l'ID du genre
+        container.appendChild(button);
+    });
+}
+
+// Exemple de fonction pour filtrer les films par genre (à compléter selon la logique de filtrage)
+function filterGenre(genreId) {
+    console.log(`Filtrage des films pour le genre: ${genres[genreId]}`);
+    // Ici, ajoutez la logique pour filtrer les films et mettre à jour l'UI en conséquence
+}
+
+    
+</script>
         
 </body>
 </html>
