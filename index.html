@@ -8,90 +8,31 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script src="movie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/9.1.4/riot+compiler.min.js"></script>
     
+
+    <script type="riot" src="ModalComponent.riot"></script>
+    <script type="riot" src="NavbarComponent.riot"></script>
+    <script type="riot" src="HeaderComponent.riot"></script>
+    <script type="riot" src="footer-component.riot"></script>
+    
+    <script>
+            riot.compile().then(() => {
+                riot.mount('modal-component');
+                riot.mount('navbar-component');
+                riot.mount('header-component');
+                riot.mount('footer-component');
+            });
+        ;
+    </script>
+
 </head>
 <body>
 
-    <div id="movieModal" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title" id="modalMovieTitle">Titre du film</p>
-            <button class="delete" aria-label="close" onclick="closeModal()"></button>
-          </header>
-          <section class="modal-card-body">
-            <div class="content">
-              <figure class="image is-4by3">
-                <img id="modalMoviePoster" src="" alt="Poster du film">
-              </figure>
-              <p id="modalMovieDescription"></p>
-            </div>
-          </section>
-          <footer class="modal-card-foot">
-            <button class="button is-success" onclick="closeModal()">Fermer</button>
-          </footer>
-        </div>
-      </div>
-      
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <a class="navbar-item" href="#">
-                <i class="fas fa-home"></i>&nbsp;Home
-            </a>
-    
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-        <div class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item" href="#">Films</a>
-                <a class="navbar-item" href="#">Séries</a>
-    
-                <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">Plus</a>
-    
-                    <div class="navbar-dropdown">
-                        <a class="navbar-item" href="#">À propos</a>
-                        <a class="navbar-item" href="#">Contact</a>
-                        <hr class="navbar-divider">
-                        <a class="navbar-item" href="#">Report an issue</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-    
-    <header class="hero is-dark is-bold" style="padding: 3rem 0;">
-        <div class="hero-body">
-            <div class="container has-text-centered">
-                <h1 class="title is-1">Bienvenue !</h1>
-                <h2 class="subtitle">Explorez un univers de films et séries</h2>
-                <div class="field has-addons has-addons-centered">
-                    <div class="control is-expanded">
-                        <input class="input is-medium" type="text" placeholder="Recherchez..." id="searchInput">
+   <navbar-component></navbar-component>
+   <header-component></header-component>
+   <modal-component></modal-component>
 
-                    </div>
-                    <div class="control">
-                        <a class="button is-info is-medium" onclick="searchMovies()">
-                            <span class="icon">
-                                <i class="fas fa-search"></i>
-                            </span>
-                            <span>Recherche</span>
-                        </a>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-        </div>
-    </header>
-    
-    
     <div class="columns" style="margin-top: 20px;">
         <aside class="column is-2">
             <aside class="menu menu-sticky">
@@ -108,10 +49,6 @@
                 <p class="menu-label" style="margin-top: 20px;">Genres</p>
                 <div class="buttons" id="genreButtons">
                     <div class="buttons" id="genreButtons">
-    <button class="button is-small is-info is-light" onclick="filterGenre('action')">Action</button>
-    <button class="button is-small is-info is-light" onclick="filterGenre('comedy')">Comédie</button>
-    <button class="button is-small is-info is-light" onclick="filterGenre('horror')">Horreur</button>
-    <!-- Ajoutez plus de boutons selon les genres que vous souhaitez -->
 </div>
 
                 </div>
@@ -119,16 +56,10 @@
             
         </aside>     
         
-        <main class="column">
-            <div class="container">
-                <section class="section">
-                    <div class="container has-text-centered">
-                        <h2 class="title is-3" style="font-weight: bold; font-family: 'Poppins', sans-serif; margin-bottom: 2rem;">Les films en tendance !</h2>
-                    </div>
-                </section>
+
                 
                 <div id="movies" class="columns is-multiline">
-                    <!-- Les films seront chargés ici -->
+                    <!-- Les films vont ici -->
                 </div>
             </div>
         </main>
@@ -149,21 +80,7 @@
             </ul>
         </nav>
     </div>
-    
-
-    <footer class="footer">
-        <div class="content has-text-centered">
-            <p>
-                <strong class="has-text-white">Fait</strong> par <a href="https://github.com" class="has-text-light">Nassim El Haddad</a>. <br>
-                <strong class="has-text-white">Fait</strong> par <a href="https://github.com" class="has-text-light">Marjorie Daveluy</a>.
-            </p>
-        </div>
-    </footer>
-    <div class="marquee">
-        <div class="marquee-content">
-            
-        </div>
-    </div>
+    <footer-component></footer-component>
     <script>
         const apiKey = '34c6494d54853100f99d5fdf6bde3dd7';
         const apiUrlTrending = `https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}&language=fr-FR`;
@@ -388,8 +305,7 @@ function filterGenre(genreId) {
     console.log(`Filtrage des films pour le genre: ${genres[genreId]}`);
     // Ici, ajoutez la logique pour filtrer les films et mettre à jour l'UI en conséquence
 }
-
-    
+   
 </script>
         
 </body>

@@ -1,33 +1,40 @@
-
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif; /* Police moderne et esthétique */
+    background-color: #000000;
+    color: #ffffff; /* Texte en blanc */
 }
 
-.hero.is-dark {
-    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.footer {
-    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.hero.is-dark, .footer {
+    background-image: url('path/to/your/dark-background-image.jpg');
+    background-size: cover;
     color: white;
 }
 
-.menu-sticky {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background-color: #fff;
-    padding: 10px 20px;
-    margin-left: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+.navbar, .navbar-menu {
+    background-color: #000000; /* Noir */
+}
+
+.navbar-item, .navbar-link {
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.navbar-item:hover, .navbar-link:hover {
+    color: #1e90ff; /* Bleu Dodger */
+}
+
+/* Pour garder la liste déroulante de la navbar en noir */
+.navbar-dropdown {
+    background-color: #000; /* Noir */
+    color: white;
 }
 
 .card {
     transition: transform 0.3s ease;
     border-radius: 10px;
+    aspect-ratio: 2 / 3;
 }
 
 .card:hover {
@@ -35,66 +42,148 @@ body, html {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-.card-content {
-    padding: 20px;
+.card-image figure.image {
+    padding-top: 150%;
+    background-position: center;
+    background-size: cover;
 }
 
-.menu-list a:hover {
-    background-color: #667eea;
+.input.is-medium {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
 }
 
-.stars {
-    color: gold;
+.button.is-info.is-medium {
+    background-color: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-.tags {
-    margin-top: 0.5rem;
+.button.is-info.is-medium:hover, .button.is-info.is-medium:focus {
+    background-color: rgba(30, 144, 255, 0.1);
+    color: #1e90ff;
+    border-color: #1e90ff;
 }
 
-.menu-sticky {
-position: -webkit-sticky; 
-position: sticky;
-top: 0;
-z-index: 10;
-background-color: #fff;
-padding: 10px 20px;
-margin-left: 20px;
-border-radius: 8px;
-box-shadow: 0 2px 4px rgba(0,0,0,.1);
-max-height: 100vh;
-overflow-y: auto;
+.pagination-link, .pagination-previous, .pagination-next {
+    border-color: rgba(255, 255, 255, 0.4);
+    color: white;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.marquee {
-overflow: hidden;
-position: relative;
-background-color: #333; /* Arrière-plan sombre */
-color: #fff; /* Texte blanc */
-display: flex;
-align-items: center; /* Centre verticalement le texte */
-padding: 20px 0; /* Augmente le padding pour plus d'espace vertical */
-box-shadow: 0px 2px 5px rgba(0,0,0,0.5);
+.pagination-link:hover, .pagination-previous:hover, .pagination-next:hover {
+    background-color: rgba(30, 144, 255, 0.1);
+    color: #1e90ff;
+    border-color: #1e90ff;
 }
 
-.marquee-content {
-position: absolute;
-white-space: nowrap; /* Garde le texte sur une seule ligne */
-/* Pas besoin de définir une position de départ en CSS */
+/* Titre "Les films en tendance" en blanc */
+.title.is-3 {
+    color: white; /* Changé de rgba(30, 144, 255, 0.8) à blanc */
+    font-weight: bold;
+}
+
+aside {
+    background-color: rgba(28, 28, 28, 0.95);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    overflow-y: auto;
+}
+
+.menu-sticky, .marquee {
+    background-color: #1a1a1a;
+}
+
+.footer {
+    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.hero.is-dark {
+    background-image: linear-gradient(to right, #000000, #333333);
+    color: white;
+}
+
+/* Changement de la couleur de texte pour l'élément actif ou en survol dans la liste déroulante */
+.navbar-item.has-dropdown.is-hoverable:hover > .navbar-link,
+.navbar-item.has-dropdown.is-active > .navbar-link {
+    color: #000000; /* Texte en noir */
+}
+
+/* Changement de la couleur de texte pour les éléments dans la liste déroulante */
+.navbar-dropdown a.navbar-item:hover,
+.navbar-dropdown a.navbar-item.is-active {
+    color: #000000 !important; /* Force le texte en noir */
+    background-color: #f5f5f5 !important; /* Optionnel: change le fond pour un gris clair pour maintenir la visibilité */
+}
+
+/* Style de la modale elle-même */
+.modal-card {
+    background-color: #000; /* Fond noir */
+    box-shadow: none; /* Pas d'ombre */
+    max-width: 80%; /* Largeur maximale de la modale pour ne pas occuper tout l'écran */
+    margin: auto; /* Centrer la modale dans l'espace disponible */
+}
+
+/* Style du corps de la modale avec l'image et le contenu côte à côte */
+.modal-card-body {
+    display: flex; /* Utiliser flexbox pour disposer les éléments */
+    background-color: #000; /* Fond noir */
+    padding: 20px; /* Espace autour du contenu */
+}
+
+/* Assurez-vous que l'image conserve son ratio d'aspect original et n'est pas écrasée */
+.modal-card-body img {
+    object-fit: contain; /* Garantit que le contenu de l'image est dimensionné pour être contenu dans son bloc sans être déformé */
+    max-width: 50%; /* L'image peut prendre jusqu'à la moitié de la largeur de la modale */
+    max-height: 80vh; /* Hauteur maximale de l'image pour s'adapter à la vue */
+    border: 0; /* Pas de bordure pour l'image */
+}
+
+/* Style pour le texte à droite de l'image */
+.modal-content {
+    color: #fff; /* Texte en blanc */
+    margin-left: 20px; /* Espacement entre l'image et le texte */
+    max-width: 50%; /* Le texte peut prendre jusqu'à la moitié de la largeur de la modale */
+    overflow-y: auto; /* Permettre le défilement si le texte est trop long */
+}
+
+/* Style pour les boutons en bas de la modale */
+.modal-card-foot {
+    background-color: #000; /* Fond noir pour le pied de page de la modale */
+    border-top: none; /* Pas de bordure en haut */
+}
+
+.modal-card-foot .button {
+    background-color: transparent; /* Boutons transparents avec texte et bordure blancs */
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+.modal-card-foot .button:hover {
+    background-color: #fff; /* Boutons deviennent blancs avec texte noir au survol */
+    color: #000;
+}
+
+.fas.fa-star, .far.fa-star {
+    color: gold; /* Couleur dorée pour les étoiles */
+    stroke: black; /* Contours noirs pour les étoiles */
+    stroke-width: 20px; /* Épaisseur des contours des étoiles */
+}
+
+/* Container pour les étoiles et la note numérique */
+.stars-and-rating {
+    display: flex;
+    align-items: center;
+}
+
+/* Style pour la note numérique */
+.rating {
+    color: black; /* Couleur noire pour la note numérique */
+    margin-left: 10px; /* Espacement entre les étoiles et la note numérique */
 }
 
 
-.hero {
-padding-bottom: 20px; /* Ajuste cette valeur selon les besoins */
-/* Autres styles du hero */
-}
-
-
-@keyframes marquee-animation {
-from {
-transform: translateX(100%);
-}
-to {
-transform: translateX(-100%); /* Fait défiler le texte jusqu'à ce qu'il soit entièrement hors de vue à gauche */
-}
-}
