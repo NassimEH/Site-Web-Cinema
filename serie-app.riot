@@ -1,0 +1,177 @@
+<serie-app>
+    <div class="header-content">
+    <link rel="stylesheet" href="CSS/style2.css">
+
+    <header class="hero is-dark is-bold" style="padding: 3rem 0;">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title is-1">Bienvenue dans le monde des séries !</h1>
+                <h2 class="subtitle">Explorez un univers de séries diversifiées</h2>
+                <div class="field has-addons has-addons-centered">
+                    <div class="control is-expanded">
+                        <input class="input is-medium" type="text" placeholder="Recherchez des séries..." id="search-input">
+                    </div>
+                    <div class="control">
+                        <a class="button is-info is-medium" onclick="{ this.searchSeries }">
+                            <span class="icon">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <span>Recherche</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container"></div>
+    </header>
+
+    <div class="column is-one-quarter">
+        <aside class="menu">
+            <p class="menu-label">Filtre et Ordre :</p>
+            <div class="columns is-centered">
+                <div class="column is-narrow">
+                    <div class="select is-rounded">
+                        <select id="filterSelect">
+                            <option value="popular">Populaires</option>
+                            <option value="top_rated">Mieux notés</option>
+                            <option value="on_the_air">Diffusées actuellement</option>
+                            <option value="airing_today">Diffusées aujourd'hui</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="column is-narrow">
+                    <div class="select is-rounded">
+                        <select id="orderSelect">
+                            <option value="popularity">Par popularité</option>
+                            <option value="rating">Par note</option>
+                            <option value="date">Par date de première diffusion</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="genre-filter">
+                <p class="filtres">GENRE :</p>
+                <button onclick="mountApp.fetchSeriesByGenre(28)">Action</button>
+            </div>
+            <button class="search-button" onclick="{ this.searchSeries }">Rechercher</button>
+        </aside>
+    </div>
+
+    <div class="column">
+        <div if="{isLoading}">Chargement des séries...</div>
+        <div if="{ !showDetail }">
+            <div class="series" if="{!isLoading}">
+                <div class="serie" each="{serie in series}" onclick="{ () => showSerieDetail(serie.id) }">
+                    <div class="serie-card">
+                        <img src="https://image.tmdb.org/t/p/w500{serie.poster_path}" alt="{serie.name}" title="{serie.name}">
+                        <h2>{serie.name}</h2>
+                        <h3 class="serie-info">Première diffusion: {serie.first_air_date}</h3>
+                        <h3 class="serie-info">Note: {serie.vote_average} / 10</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="pagination" role="navigation" aria-label="pagination">
+            <a class="pagination-previous" onclick={prevPage}>Précédent</a>
+            <a class="pagination-next" onclick={nextPage}>Suivant</a>
+            <ul class="pagination-list">
+            </ul>
+        </nav>
+    </div>
+</div>
+  <script>
+  const base = `${window.location.hash ? window.location.hash.replace("#", '') : ''}`;
+
+export default {
+    series: [],
+    isLoading: true,
+    showDetail: false,
+    serieId: null,
+    state: {
+        pages: 1,
+    },
+    onMounted() {
+        this.fetchSeries();
+    },
+
+    fetchSeries(url = `https://api.themoviedb.org/3/tv/popular?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&page=${this.state.pages}`) {
+        console.log("Début de la requête API pour les séries");
+
+        fetch(url)
+            .then(response => {
+                console.log("Réponse reçue", response);
+                if (!response.ok) {
+                    throw new Error(`API call failed: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Données reçues", data);
+                this.series = data.results;
+                this.totalPages = data.total_pages;
+                this.isLoading = false;
+            })
+            .catch(err => {
+                console.error("Erreur de chargement des séries:", err);
+                this.isLoading = false;
+            })
+            .finally(() => {
+                this.update();
+            });
+    },
+
+    nextPage() {
+    if (this.state.pages < this.totalPages) {
+        this.state.pages++;
+        this.fetchSeries(`https://api.themoviedb.org/3/tv/popular?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&page=${this.state.pages}`);
+        window.scrollTo(0, 0);
+        this.update();
+    }
+},
+
+prevPage() {
+    if (this.state.pages > 1) {
+        this.state.pages--;
+        this.fetchSeries(`https://api.themoviedb.org/3/tv/popular?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&page=${this.state.pages}`);
+        window.scrollTo(0, 0);
+        this.update();
+    }
+},
+
+    searchSeries() {
+        const searchText = document.getElementById('search-input').value;
+        if (searchText.trim()) {
+            const url = `https://api.themoviedb.org/3/search/tv?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&query=${encodeURIComponent(searchText)}&page=1`;
+            this.isLoading = true;
+            this.series = [];
+            this.fetchSeries(url);
+        }
+    },
+    showSerieDetail(serieId) {
+        this.showDetail = true;
+        this.serieId = serieId;
+        window.location.href = `#/series/detail/${this.serieId}`;
+    },
+    translateRatingToStars(rating) {
+        const maxStars = 10;
+        const filledStars = Math.round((rating / 10) * maxStars);
+        const emptyStars = maxStars - filledStars;
+
+        let stars = '';
+
+        for (let i = 0; i < filledStars; i++) {
+            stars += '<i class="fas fa-star" style="color: yellow;"></i>';
+        }
+
+        for (let i = 0; i < emptyStars; i++) {
+            stars += '<i class="far fa-star" style="color: yellow;"></i>';
+        }
+
+        return stars;
+    }
+};
+
+  </script>
+
+</serie-app>
