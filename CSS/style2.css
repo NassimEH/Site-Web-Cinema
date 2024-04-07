@@ -1,5 +1,5 @@
 .navbar {
-    background-color: black;
+    background-color: black; 
 }
 
   .navbar-item {
@@ -58,23 +58,20 @@
     display:block;
   }
 
-.column.is-one-quarter {
-  display: flex;
-  flex-direction: row; 
-  justify-content: space-between; 
-  align-items: flex-start; 
-  width: 100%; 
+  .column.is-one-quarter {
+    display: flex; 
+    flex-direction: column; 
 }
 
-
-.menu, .genre-filter {
-  flex: 1; 
-  margin: 0 10px; 
+.genre-filter {
+    display: flex; 
+    flex-wrap: wrap; 
+    padding-top: 20px; 
 }
 
-.search-button {
-  align-self: center; 
-  margin-left: auto; 
+.genre-filter button {
+    margin-right: 10px; 
+    margin-bottom: 10px; 
 }
 
 .button.is-info.is-medium {
@@ -85,11 +82,11 @@
   position: relative;
 }
 
-
 .button.is-info.is-medium span {
   position: relative;
   z-index: 2;
 }
+
 
 .button.is-info.is-medium:hover {
   background-color: transparent;
@@ -118,89 +115,76 @@
 }
 
 
-  .films {
+.series {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around; 
   }
   
-  .film {
-    width: calc(25% - 10px); 
-    margin: 5px; 
-    box-sizing: border-box;
+  .serie {
+    width: calc(25% - 20px); 
+    margin: 10px; 
   }
   
-  .film-card {
+  .serie-card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; 
-    min-height: 350px;     
-    margin:10px;
+    justify-content: space-between;
+    min-height: 350px; 
+    margin: auto; 
     border: 1px solid #000000; 
     border-radius: 8px; 
-  
-    background-color: #0c0c0c;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #0c0c0c; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
     transition: transform 0.3s ease; 
-    width: 100%;
   }
-  .film-card:hover {
-    transform: scale(1.05); 
-    z-index: 10; 
-  }
-  .film-card img {
+  
+  .serie-card img {
     width: 100%;
     height: auto;
-    border-radius: 8px;
-    object-fit: contain;
+    border-radius: 8px; 
+    object-fit: cover; 
   }
-   .film h2 {
-        font-size: 25px;
-        color: #ffffff;
-        line-height: 1.2;
-        text-align: center;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-    .film h3 {
-       color: #ffffff;
-    }
-      .film p {
+  
+  .serie-card:hover {
+    transform: scale(1.05); 
+  }
+  
+  
+  .serie h2, .serie h3 {
+    color: #ffffff; 
+    text-align: center; 
+  }
+  
+  
+      .serie p {
         font-size: 20px;
         color: #000000;
         text-align: center;
       }
   
-button {
-  background-color: transparent;
-  color: white;
-  border: 2px solid white;
-  padding: 10px 20px;
-  margin: 0 5px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-button:hover {
-  background-color: white;
-  color: black;
-}
-
-.selected {
-  background-color: white;
-  color: black;
-}
+  button {
+    margin: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
 
   @media (max-width: 768px) {
-    .film {
+    .series {
       width: calc(50% - 10px); 
     }
   }
   
   @media (max-width: 480px) {
-    .film {
+    .series {
       width: 100%; 
     }
   }
@@ -230,7 +214,7 @@ button:hover {
 .header-content h1 {
     font-size: 52px; 
     margin-bottom: 10px; 
-    margin-top: 0;
+    margin-top: 0; 
     color: white;
     font-weight: bold;
 }
@@ -248,18 +232,10 @@ button:hover {
     color: white; 
 }
 
-.film-title,
-.film-info {
+.serie-title,
+.serie-info {
   color: black;
 }
-
-body {
-  background-color: black; 
-  color: white; 
-}
-
-
-
 
 
   
