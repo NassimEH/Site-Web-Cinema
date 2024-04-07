@@ -1,0 +1,64 @@
+<actor-profile>
+<script>
+    export default {
+      actor: null,
+      showMovies: false,
+      
+      onBeforeMount(props) {
+        this.fetchActorDetails();
+      },
+      toggleMovies() {
+        this.showMovies = !this.showMovies; 
+        this.update(); 
+      },
+      fetchActorDetails() {
+        const api_key = '34c6494d54853100f99d5fdf6bde3dd7';
+        const url = `https://api.themoviedb.org/3/person/${this.props.acteurid}?api_key=${api_key}&language=fr-FR&append_to_response=movie_credits,external_ids`;
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            this.actor = data;
+            this.update();
+          });
+      }
+    };
+</script>
+
+<link rel="stylesheet" type='text/css' media='screen' href='CSS/acteurs.css'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+<div class="actor-profile" if="{actor}">
+    <div class="actor-container">
+        <div class="actor-image">
+            <img src="{ actor.profile_path ? `https://image.tmdb.org/t/p/w300${actor.profile_path}` : 'img/placeholder.jpg' }" alt="Photo of { actor.name }">
+        </div>
+        <div class="actor-details">
+            <h1 class="actor-name">{ actor.name }</h1>
+            <ul class="actor-meta">
+                <li>Date de naissance: { actor.birthday }</li>
+                <li>Lieu de naissance: { actor.place_of_birth }</li>
+            </ul>
+            <p class="actor-biography">{ actor.biography }</p>
+            <div class="social-links">
+              <a if="{actor.external_ids.twitter_id}" href="https://twitter.com/{actor.external_ids.twitter_id}" target="_blank"><i class="fab fa-twitter"></i></a>
+              <a if="{actor.external_ids.instagram_id}" href="https://instagram.com/{actor.external_ids.instagram_id}" target="_blank"><i class="fab fa-instagram"></i></a>
+              <a if="{actor.external_ids.facebook_id}" href="https://facebook.com/{actor.external_ids.facebook_id}" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          </div>
+
+            <div class="actor-credits">
+                <h2>Films</h2>
+                <button onclick="{toggleMovies}">Afficher les films</button>
+                <ul if="{showMovies}">
+                    <li each="{ movie in actor.movie_credits.cast }" >
+                    <a href="#/movie/detail/{movie.id}">
+                        { movie.title } ({ new Date(movie.release_date).getFullYear() })
+                    </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</actor-profile>

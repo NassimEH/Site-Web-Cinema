@@ -1,0 +1,244 @@
+<film-app>
+<router base={base}>
+<route path="">
+    <div class="header-content">
+    <link rel="stylesheet" href='CSS/style1.css'>
+
+<header class="hero is-dark is-bold" style="padding: 3rem 0;">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title is-1">Bienvenue dans le monde des films !</h1>
+                <h2 class="subtitle">Explorez un univers de films diversifiés</h2>
+                <div class="field has-addons has-addons-centered">
+                    <div class="control is-expanded">
+                        <input class="input is-medium" type="text" placeholder="Recherchez..." id="search-input">
+
+                    </div>
+                    <div class="control">
+                        <a class="button is-info is-medium" onclick="{ this.searchMovies }">
+                            <span class="icon">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <span>Recherche</span>
+                        </a>                  
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+        </div>
+    </header>
+      <div class="column is-one-quarter">
+    <aside class="menu">
+        <p class="menu-label">Filtre :</p>
+        <div class="columns is-centered">
+          <button onclick="{ this.fetchMoviePopular }">Populaires</button>
+          <button onclick="{ this.fetchMovieTopRated }">Mieux notés</button>
+          <button onclick="{ this.fetchMovieUpcoming }">À venir</button>
+          <button onclick="{ this.fetchMovieNowPlaying }">En ce moment</button>
+        </div>
+             <p class="menu-label">Ordre :</p>
+              <div class="columns is-centered">
+            <button> Par note </button>
+            <button> Par popularité </button>
+            <button> Par dates  </button>
+            </div>
+        </div>
+    <div class="genre-filter">
+        <p class="filtres">Genres : </p>
+          <button onclick="{ () => fetchMoviesByGenre(28)}">Action</button>
+            <button onclick="{ () => fetchMoviesByGenre(12)}">Aventure</button>
+            <button onclick="{ () => fetchMoviesByGenre(16)}">Animation</button>
+            <button onclick="{ () => fetchMoviesByGenre(35)}">Comédie</button>
+            <button onclick="{ () => fetchMoviesByGenre(80)}">Crime</button>
+            <button onclick="{ () => fetchMoviesByGenre(99)}">Documentaire</button>
+            <button onclick="{ () => fetchMoviesByGenre(18)}">Drame</button>
+            <button onclick="{ () => fetchMoviesByGenre(10751)}">Familial</button>
+            <button onclick="{ () => fetchMoviesByGenre(14)}">Fantastique</button>
+            <button onclick="{ () => fetchMoviesByGenre(10752)}">Guerre</button>
+            <button onclick="{ () => fetchMoviesByGenre(36)}">Histoire</button>
+            <button onclick="{ () => fetchMoviesByGenre(27)}">Horreur</button>
+            <button onclick="{ () => fetchMoviesByGenre(10402)}">Musique</button>
+            <button onclick="{ () => fetchMoviesByGenre(9648)}">Mystère</button>
+            <button onclick="{ () => fetchMoviesByGenre(10749)}">Romance</button>
+            <button onclick="{ () => fetchMoviesByGenre(878)}">Science Fiction</button>
+            <button onclick="{ () => fetchMoviesByGenre(10770)}">Téléfilm</button>
+            <button onclick="{ () => fetchMoviesByGenre(53)}">Thriller</button>
+            <button onclick="{ () => fetchMoviesByGenre(37)}">Western</button>
+    </div>
+</div>
+        </div>
+        <div class="column"> 
+      <div if="{isLoading}">
+      Chargement des films...
+    </div>
+  <div if="{ !showDetail }">
+    <div class="films" if="{!isLoading}">
+      <div class="film" each="{film in films}" onclick="{ () => showFilmDetail(film.id) }">
+        <div class="film-card">
+          <img src="https://image.tmdb.org/t/p/w500{film.poster_path}" alt="{film.title}" title="${film.title}">
+          <h2>{film.title}</h2>
+          <h3 class="film-info">Sortie: {film.release_date} </h3>
+          <h3 class ="film-info">Note: {film.vote_average} / 10</h3>
+
+        </div> 
+      </div>
+    </div>
+  </div>
+
+    <nav class="pagination" role="navigation" aria-label="pagination">
+    <a href="#" class="pagination-previous" onclick={prevPage}>Previous</a>
+    <a href="#" class="pagination-next" onclick={nextPage}>Next page</a>
+  </nav>
+  
+  </div>
+      </div>
+    
+  </route>
+
+  <route path="#/movie/detail/:id">
+    <film-detail filmid="{route.params.id}"></film-detail>
+  </route>
+
+  <route path="#/series">
+    <serie-app></serie-app>
+  </route>
+
+  <route path="#/series/detail/:id">
+    <serie-detail serieid="{route.params.id}"></serie-detail>
+  </route>
+
+  <route path="#/movie/detail/acteurs/:idact">
+    <actor-profile acteurid="{route.params.idact}"></actor-profile>
+  </route>
+
+  <route path="#/serie/detail/acteurs/:idactserie">
+    <actor-profile-serie acteuridS="{route.params.idactserie}"></actor-profile-serie>
+  </route>
+
+</router>
+  <script>
+  const base = `${window.location.hash ? window.location.hash.replace("#", ''):  ''}`
+
+    export default {
+      films: [],
+      liengenre: "https://api.themoviedb.org/3/discover/movie?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&page=1&with_genres=",
+      isLoading: true,
+      showDetail: false,
+      filmId: null,
+      state:{
+        pages: 1,
+      },
+      onMounted() {
+        this.fetchMovies();
+      },
+      
+    fetchMovies(url = `https://api.themoviedb.org/3/movie/popular?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&page=${this.state.pages}`) {
+    console.log("Début de la requête API"); 
+
+    fetch(url)
+    .then(response => {
+      console.log("Réponse reçue", response); 
+      if (!response.ok) {
+        throw new Error(`API call failed: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("Données reçues", data);
+      this.films = data.results;
+      this.totalPages = data.total_pages;
+      this.isLoading = false;
+    })
+    .catch(err => {
+      console.error("Erreur de chargement des films:", err);
+      this.isLoading = false;
+    })
+    .finally(() => {
+      this.update();
+    });
+},
+  nextPage() {
+    if (this.state.pages < this.totalPages) {
+        this.state.pages++;
+        this.fetchMovies();
+        this.update();
+        window.scrollTo(0, 0);
+    }
+},
+
+   prevPage() {
+    if (this.state.pages > 1) {
+      this.state.pages--
+      this.fetchMovies();
+      this.update(this.pages);
+      window.scrollTo(0, 0);
+    }
+  },
+
+searchMovies() {
+  const searchText = document.getElementById('search-input').value;
+  if (searchText.trim()) {
+      const url = `https://api.themoviedb.org/3/search/movie?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&query=${encodeURIComponent(searchText)}&page=1`;
+      this.isLoading = true;
+      this.films = [];
+      this.fetchMovies(url);
+  }
+},
+
+
+  showFilmDetail(filmId) {
+        this.showDetail = true;
+        this.filmId = filmId;
+        window.location.href = "#/movie/detail/"+this.filmId;
+      },
+
+  
+   translateRatingToStars(rating) {
+    const maxStars = 10; 
+    const filledStars = Math.round((rating / 10) * maxStars); 
+    const emptyStars = maxStars - filledStars; 
+
+    let stars = '';
+
+    for (let i = 0; i < filledStars; i++) {
+      stars += '<i class="fas fa-star" style="color: yellow;"></i>'; 
+    }
+
+    for (let i = 0; i < emptyStars; i++) {
+      stars += '<i class="far fa-star" style="color: yellow;"></i>'; 
+    }
+
+    return stars;
+  },
+
+  fetchMoviesByGenre(idgenre) {
+    this.liengenre = this.liengenre+idgenre+",";
+    console.log(this.liengenre);
+    this.fetchMovies(this.liengenre);
+
+    this.update();
+  },
+
+   fetchMoviePopular() {
+    const url = 'https://api.themoviedb.org/3/movie/popular?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&page=1';
+    this.fetchMovies(url);
+  },
+
+  fetchMovieTopRated() {
+    const url = 'https://api.themoviedb.org/3/movie/top_rated?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&page=1';
+    this.fetchMovies(url);
+  },
+
+  fetchMovieUpcoming() {
+    const url = 'https://api.themoviedb.org/3/movie/upcoming?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&page=1';
+    this.fetchMovies(url);
+  },
+
+  fetchMovieNowPlaying() {
+    const url = 'https://api.themoviedb.org/3/movie/now_playing?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&page=1';
+    this.fetchMovies(url);
+  },
+};
+  </script>
+</film-app>

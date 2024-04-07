@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Le meilleur site de cinéma</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma-rtl.min.css">
+    <link rel="stylesheet" href='CSS/style1.css'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/riot/9.1.4/riot+compiler.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script type="riot" src="film-app.riot"></script>
+    <script type="riot" src="film-detail.riot"></script>
+    <script type="riot" src="actor-profile.riot"></script>
+    <script type="riot" src="serie-app.riot"></script>
+    <script type="riot" src="serie-detail.riot"></script>
+    <script type="riot" src="actor-profile-serie.riot"></script>
+    <script src="https://unpkg.com/@riotjs/route/index.umd.js"></script>
+    <script>
+
+    riot.register("router", route.Router); 
+    riot.register("route", route.Route); 
+
+    riot.compile().then(() => {
+    riot.mount('film-app'); 
+});
+</script>
+    
+</head>
+<body>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="#">
+            <i class="fas fa-home"></i>&nbsp;Home
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="#" id="navFilms">Films</a>
+            <a class="navbar-item" href="#/series" id="navSeries">Séries</a>
+
+
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">Plus</a>
+
+                <div class="navbar-dropdown">
+                    <a class="navbar-item" href="#">À propos</a>
+                    <a class="navbar-item" href="#">Contact</a>
+                    <hr class="navbar-divider">
+                    <a class="navbar-item" href="#">Report an issue</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav> 
+
+    <film-app></film-app>
+
+    <footer class="footer">
+      <div class="content has-text-centered">
+          <p>
+              <strong class="has-text-white">Fait</strong> par <a href="https://www.linkedin.com/in/nassim-el-haddad-4aa298271/" class="has-text-light">Nassim El Haddad</a>. <br>
+              <strong class="has-text-white">Fait</strong> par <a href="https://www.linkedin.com/in/marjorie-daveluy/" class="has-text-light">Marjorie Daveluy</a>.
+          </p>
+      </div>
+  </footer>
+  <div class="marquee">
+      <div class="marquee-content">
+          
+      </div>
+  </div>
+</body>
+<script>
+  const marqueeText = "Le meilleur site pour les cinéphiles, constamment mis à jour rien que pour vous.";
+    const marqueeContainer = document.querySelector('.marquee');
+    const marqueeContent = document.createElement('div');
+    marqueeContent.classList.add('marquee-content');
+    marqueeContent.textContent = marqueeText; 
+    marqueeContainer.appendChild(marqueeContent);
+
+    let marqueeSpeed = 2; 
+    let marqueePosition = marqueeContainer.offsetWidth; 
+
+    function updateMarquee() {
+        marqueePosition -= marqueeSpeed; 
+        if (marqueePosition < -marqueeContent.offsetWidth) {
+            marqueePosition = marqueeContainer.offsetWidth; 
+        }
+        marqueeContent.style.transform = `translateX(${marqueePosition}px)`;
+        requestAnimationFrame(updateMarquee); 
+    }
+    updateMarquee(); 
+
+</script>
+</html>

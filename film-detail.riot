@@ -1,0 +1,49 @@
+<film-detail>
+  <script>
+    export default {
+      movie: null,
+      backgroundImageUrl: '',
+      onMounted(props) {
+        if(this.props.filmid) {
+          this.fetchMovieDetail();
+        }
+      },
+
+      fetchMovieDetail() {
+        const url = `https://api.themoviedb.org/3/movie/${this.props.filmid}?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&append_to_response=credits`;
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            this.movie = data;
+            this.movie.cast = data.credits.cast;
+            this.backgroundImageUrl = `https://image.tmdb.org/t/p/original${data.backdrop_path}`;
+            this.update();e
+            document.body.style.backgroundImage = `url('${this.backgroundImageUrl}')`;
+          });
+      },
+    };
+  </script>
+
+  <link rel="stylesheet" type='text/css' media='screen' href='CSS/styleFilm.css'>
+  <div class="film-layout">
+    <img if="{ movie }" class="movie-poster" src="https://image.tmdb.org/t/p/w500{movie.poster_path}" alt="Poster de { movie.title }">
+    <div class="movie-details">
+      <div if="{ movie }" class="movie-info">
+        <h1 class="movie-title">{ movie.title }</h1>
+        <p class="movie-description">{ movie.overview }</p>
+        <div class="movie-cast">
+          <h3>Acteurs :</h3>
+          <ul>
+            <li each="{actor in movie.cast}">
+            <a href ="#/movie/detail/acteurs/{actor.id}">
+              <img class="actor-image" src="{ actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'Images/Meliani.png' }" alt="Image de {actor.name}" >
+              <span>{ actor.name }</span>
+            </li>
+          </ul>
+        </div>
+        <a class="button-back" href="#">Retour à la liste</a>
+      </div>
+    </div>
+  </div>
+</film-detail>

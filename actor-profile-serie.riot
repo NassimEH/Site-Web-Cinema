@@ -1,0 +1,62 @@
+<actor-profile-serie>
+<script>
+    export default {
+      actor: null,
+      showSeries: false, 
+      onBeforeMount(props) {
+        if(this.props.acteuridS) {
+            this.fetchActorDetails();
+        }
+      },
+      toggleSeries() {
+        this.showSeries = !this.showSeries; 
+        this.update(); 
+      },
+      fetchActorDetails() {
+        const api_key = '34c6494d54853100f99d5fdf6bde3dd7';
+        const url = `https://api.themoviedb.org/3/person/${this.props.acteuridS}?api_key=${api_key}&language=fr-FR&append_to_response=tv_credits,external_ids`;
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            this.actor = data;
+            console.log("ACTEUR RECU", this.actor)
+            this.update();
+          });
+      }
+    };
+  </script>
+  <link rel="stylesheet" type='text/css' media='screen' href='CSS/acteurs.css'>
+  <div class="classe" style="background : linear-gradient(45deg, grey, black);">
+  <div if="{actor}" class="division">
+     <div class="actor-container">
+    <div class="actor-image">
+      <img src="{ actor.profile_path ? `https://image.tmdb.org/t/p/w300${actor.profile_path}` : 'img/1680951305783.jpg' }" alt="Photo of { actor.name }">
+      <div class="social-links">
+      <a if="{actor.external_ids.twitter_id}" href="https://twitter.com/{actor.external_ids.twitter_id}" target="_blank"><img class="logo"src="img/twitter_icon.png"></a>
+      <a if="{actor.external_ids.instagram_id}" href="https://instagram.com/{actor.external_ids.instagram_id}" target="_blank"><img class="logo"src="img/instagram_icon.png"></a>
+      <a if="{actor.external_ids.facebook_id}" href="https://facebook.com/{actor.external_ids.facebook_id}" target="_blank"><img class="logo"src="img/facebook_icon.png"></a>
+    </div>
+    </div>
+      <div class="actor-details">
+      <h1 class="actor-name">{ actor.name }</h1>
+      <p class="actor-biography">{ actor.biography }</p>
+      <div class="actor-meta">
+        <span>Date de naissance: { actor.birthday }</span>
+        <span>Lieu de naissance: { actor.place_of_birth }</span>
+      </div>
+      <div class="actor-credits">
+        <h2>Séries</h2>
+        <button onclick="{toggleSeries}">Afficher les séries</button>
+        <ul if="{showSeries}">
+          <li each="{ serie in actor.tv_credits.cast }">
+          <a href="#/series/detail/{serie.id}">
+            { serie.name } ({ new Date(serie.first_air_date).getFullYear() })
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+</actor-profile-serie>
