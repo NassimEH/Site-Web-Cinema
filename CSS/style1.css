@@ -1,0 +1,267 @@
+.navbar {
+    background-color: black;
+}
+
+  .navbar-item {
+    color: white;
+  }
+  .navbar-link {
+    color: white;
+  }
+  .navbar-dropdown {
+    background-color: #000000;
+  }
+  .header-content h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    color: white;
+    font-weight: bold;
+    padding-top:2em;
+  }
+
+  .header-content p {
+    font-size: 20px;
+    margin-bottom: 40px;
+    color : white;
+    font-weight: bold;;
+  }
+
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    padding-top : 3em;
+    padding-bottom: 4em;
+  }
+
+  .cta-buttons button {
+    display: inline-block;
+    background-color: transparent;
+    margin: 0 10px;
+    border-radius: 5px;
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .barre{
+    border-radius: 5px;
+    width: 500px;
+    padding: 10px;  
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  .filtres{
+    font-size: 30px;
+    font-weight: bold;
+    padding-left: 3%;
+  }
+  .dropdown-menu :hover{
+    display:block;
+  }
+
+.column.is-one-quarter {
+  display: flex;
+  flex-direction: row; 
+  justify-content: space-between; 
+  align-items: flex-start; 
+  width: 100%; 
+}
+
+
+.menu, .genre-filter {
+  flex: 1; 
+  margin: 0 10px; 
+}
+
+.search-button {
+  align-self: center; 
+  margin-left: auto; 
+}
+
+.button.is-info.is-medium {
+  background-color: transparent;
+  color: white;
+  border: 2px solid transparent; 
+  padding: 5px 20px; 
+  position: relative;
+}
+
+
+.button.is-info.is-medium span {
+  position: relative;
+  z-index: 2;
+}
+
+.button.is-info.is-medium:hover {
+  background-color: transparent;
+}
+
+.button.is-info.is-medium:hover::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 2px solid #357cf0; 
+}
+
+.search-button:hover {
+  background-color: transparent;
+}
+
+.search-button span {
+  padding: 5px 15px;
+}
+
+.search-button:hover span {
+  color: #357cf0; 
+}
+
+
+  .films {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; 
+  }
+  
+  .film {
+    width: calc(25% - 10px); 
+    margin: 5px; 
+    box-sizing: border-box;
+  }
+  
+  .film-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    min-height: 350px;     
+    margin:10px;
+    border: 1px solid #000000; 
+    border-radius: 8px; 
+  
+    background-color: #0c0c0c;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease; 
+    width: 100%;
+  }
+  .film-card:hover {
+    transform: scale(1.05); 
+    z-index: 10; 
+  }
+  .film-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+   .film h2 {
+        font-size: 25px;
+        color: #ffffff;
+        line-height: 1.2;
+        text-align: center;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    .film h3 {
+       color: #ffffff;
+    }
+      .film p {
+        font-size: 20px;
+        color: #000000;
+        text-align: center;
+      }
+  
+button {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: white;
+  color: black;
+}
+
+.selected {
+  background-color: white;
+  color: black;
+}
+
+  @media (max-width: 768px) {
+    .film {
+      width: calc(50% - 10px); 
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .film {
+      width: 100%; 
+    }
+  }
+
+  .footer {
+    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.input.is-medium {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.button.is-info.is-medium {
+    background-color: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.header-content {
+    text-align: center;
+    background-color: black; 
+}
+
+.header-content h1 {
+    font-size: 52px; 
+    margin-bottom: 10px; 
+    margin-top: 0;
+    color: white;
+    font-weight: bold;
+}
+
+.header-content p {
+    font-size: 24px; 
+    margin-bottom: 20px; 
+    margin-top: 0; 
+    color: white;
+    font-weight: bold;
+}
+
+.menu-sticky, .marquee {
+    background-color: #1a1a1a;
+    color: white; 
+}
+
+.film-title,
+.film-info {
+  color: black;
+}
+
+body {
+  background-color: black; 
+  color: white; 
+}
+
+
+
+
+
+  
+ 
+      
