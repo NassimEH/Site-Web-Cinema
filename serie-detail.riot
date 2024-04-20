@@ -7,6 +7,7 @@
         if (this.props.serieid) { 
           this.fetchSerieDetail();
         }
+        
       },
       fetchSerieDetail() {
         const url = `https://api.themoviedb.org/3/tv/${this.props.serieid}?api_key=34c6494d54853100f99d5fdf6bde3dd7&language=fr-FR&append_to_response=credits`;
